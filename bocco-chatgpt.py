@@ -15,6 +15,8 @@ client = Client(token_file_path=CURRENT_DIR)
 # Please replace "YOUR_WEBHOOK_URL" with the URL forwarded to http://localhost:8000
 YOUR_WEBHOOK_URL = ""
 client.create_webhook_setting(WebHook(YOUR_WEBHOOK_URL))
+WEBHOOK_EVENTS = ["message.received"]
+client.register_webhook_event(WEBHOOK_EVENTS)
 
 room_id_list = client.get_rooms_id()
 room_client = client.create_room_client(room_id_list[0])
@@ -55,12 +57,6 @@ def message_callback(data):
     print("Response: " + response)
 
     room_client.send_msg(response)
-
-
-@client.event('illuminance.changed')
-def illuminance_callback(data):
-    print("illuminance changed")
-    print(data)
 
 
 secret_key = client.start_webhook_event()
